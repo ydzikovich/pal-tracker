@@ -35,6 +35,14 @@ public class InMemoryTimeEntryRepositoryTest {
     }
 
     @Test
+    public void find_notFound() throws Exception {
+        TimeEntryRepository repo = new InMemoryTimeEntryRepository();
+
+        TimeEntry readEntry = repo.find(1L);
+        assertThat(readEntry).isEqualTo(null);
+    }
+
+    @Test
     public void list() throws Exception {
         TimeEntryRepository repo = new InMemoryTimeEntryRepository();
         repo.create(new TimeEntry(123, 456, LocalDate.parse("2017-01-08"), 8));
@@ -59,6 +67,17 @@ public class InMemoryTimeEntryRepositoryTest {
         TimeEntry expected = new TimeEntry(created.getId(), 321, 654, LocalDate.parse("2017-01-09"), 5);
         assertThat(updatedEntry).isEqualTo(expected);
         assertThat(repo.find(created.getId())).isEqualTo(expected);
+    }
+
+    @Test
+    public void update_notFound() throws Exception {
+        TimeEntryRepository repo = new InMemoryTimeEntryRepository();
+
+        TimeEntry updatedEntry = repo.update(
+                1L,
+                new TimeEntry(321, 654, LocalDate.parse("2017-01-09"), 5));
+
+        assertThat(updatedEntry).isEqualTo(null);
     }
 
     @Test
