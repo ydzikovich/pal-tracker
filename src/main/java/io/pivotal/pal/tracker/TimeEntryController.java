@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/time-entries")
 public class TimeEntryController {
     private TimeEntryRepository timeEntryRepository;
 
@@ -14,13 +15,13 @@ public class TimeEntryController {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    @RequestMapping(value = "/time-entries", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity create(@RequestBody TimeEntry timeEntry) {
         TimeEntry createdTimeEntry = timeEntryRepository.create(timeEntry);
         return new ResponseEntity(createdTimeEntry, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/time-entries/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public ResponseEntity<TimeEntry> read(@PathVariable long id) {
         TimeEntry timeEntry = timeEntryRepository.find(id);
         if (timeEntry == null)
@@ -29,13 +30,13 @@ public class TimeEntryController {
         return new ResponseEntity(timeEntry, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/time-entries", method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<TimeEntry>> list() {
         List<TimeEntry> timeEntries = timeEntryRepository.list();
         return new ResponseEntity(timeEntries, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/time-entries/{id}", method = RequestMethod.PUT)
+    @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable long id, @RequestBody TimeEntry timeEntry) {
         TimeEntry updatedTimeEntry = timeEntryRepository.update(id, timeEntry);
         if (updatedTimeEntry == null)
@@ -44,7 +45,7 @@ public class TimeEntryController {
         return new ResponseEntity(updatedTimeEntry, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/time-entries/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public ResponseEntity<TimeEntry> delete(@PathVariable long id) {
         timeEntryRepository.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
