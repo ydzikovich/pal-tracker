@@ -1,11 +1,4 @@
 ---
-resource_types:
-- name: slack-notification
-  type: docker-image
-  source:
-    repository: cfcommunity/slack-notification-resource
-    tag: latest
-
 resources:
 - name: pal-tracker
   type: git
@@ -48,11 +41,6 @@ resources:
     organization: {{cf-org}}
     space: production
 
-- name: slack-alert
-  type: slack-notification
-  source:
-    url: https://hooks.slack.com/services/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
-
 jobs:
 - name: build
   plan:
@@ -93,6 +81,3 @@ jobs:
       path: pal-tracker-artifacts/pal-tracker-*.jar
       environment_variables:
         WELCOME_MESSAGE: "Hello from the production environment"
-  - put: slack-alert
-    params:
-      text: "Pal tracker was pushed to prod!"
